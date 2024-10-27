@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menstrual Kit Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffccdb; /* Light pink background */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            color: #333;
+        }
+
+        header {
+            background-color: #d63384; /* Dark pink header */
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        .kit-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Enable scrolling if necessary */
+        }
+
+        .kit-item {
+            background: white;
+            border: 1px solid #d63384;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            flex: 1 1 200px; /* Flexible item size */
+            transition: transform 0.3s;
+        }
+
+        .kit-item:hover {
+            transform: translateY(-5px); /* Hover effect */
+        }
+
+        button {
+            background-color: #d63384; /* Button color */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Full-width buttons */
+        }
+
+        button:hover {
+            background-color: #a8276a; /* Darker shade on hover */
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin: 10px 0; /* Space for toggle */
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #d63384;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .low-stock {
+            color: red; /* Low stock alert color */
+            font-weight: bold;
+        }
+
+        .kit-header {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Menstrual Kit Tracker</h1>
+    </header>
+    <div class="kit-container" id="kitContainer">
+        <div class="kit-item">
+            <div class="kit-header">Sanitary Pads</div>
+            <button onclick="markAsUsed('sanitaryPads')">Use</button>
+            <span id="sanitaryPadsCount">10</span>
+        </div>
+        <div class="kit-item">
+            <div class="kit-header">Tampons</div>
+            <button onclick="markAsUsed('tampons')">Use</button>
+            <span id="tamponsCount">10</span>
+        </div>
+        <div class="kit-item">
+            <div class="kit-header">Pantyliners</div>
+            <button onclick="markAsUsed('pantyliners')">Use</button>
+            <span id="pantylinersCount">10</span>
+        </div>
+        <div class="kit-item">
+            <div class="kit-header">Heat Patch</div>
+            <label class="switch">
+                <input type="checkbox" id="heatPatchToggle" onchange="toggleHeatPatch(this)">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="kit-item">
+            <div class="kit-header">Disposal Bin</div>
+            <button onclick="checkDisposalBin()">Check Status</button>
+            <span id="disposalBinStatus">Empty</span>
+        </div>
+        <div class="kit-item">
+            <div class="kit-header">User Box Material</div>
+            <button onclick="checkUserBox()">Check</button>
+            <span id="userBoxStatus">Contains Material</span>
+        </div>
+    </div>
+
+    <script>
+        // Menstrual Kit Tracking
+        const kitItems = {
+            sanitaryPads: { quantity: 10, alertThreshold: 3 },
+            tampons: { quantity: 10, alertThreshold: 3 },
+            pantyliners: { quantity: 10, alertThreshold: 3 },
+            heatPatches: { isOn: false },
+            disposalBin: { isFull: false },
+            userBox: { hasMaterial: true }
+        };
+
+        function markAsUsed(item) {
+            if (kitItems[item].quantity > 0) {
+                kitItems[item].quantity--;
+                updateDisplay();
+                checkLowStock(item);
+            } else {
+                alert(item.charAt(0).toUpperCase() + item.slice(1) + " are out of stock!");
+            }
+        }
+
+        function toggleHeatPatch(checkbox) {
+            kitItems.heatPatches.isOn = checkbox.checked;
+            alert(`Heat Patch is now ${checkbox.checked ? 'ON' : 'OFF'}.`);
+        }
+
+        function checkDisposalBin() {
+            kitItems.disposalBin.isFull = !kitItems.disposalBin.isFull; // Toggle state for simulation
+            document.getElementById("disposalBinStatus").innerText = kitItems.disposalBin.isFull ? 'Full' : 'Empty';
+            alert(`Disposal Bin is now ${kitItems.disposalBin.isFull ? 'FULL' : 'EMPTY'}.`);
+        }
+
+        function checkUserBox() {
+            alert(`User Box has material: ${kitItems.userBox.hasMaterial ? 'Yes' : 'No'}.`);
+        }
+
+        function updateDisplay() {
+            document.getElementById("sanitaryPadsCount").innerText = kitItems.sanitaryPads.quantity;
+            document.getElementById("tamponsCount").innerText = kitItems.tampons.quantity;
+            document.getElementById("pantylinersCount").innerText = kitItems.pantyliners.quantity;
+
+            checkLowStock('sanitaryPads');
+            checkLowStock('tampons');
+            checkLowStock('pantyliners');
+        }
+
+        function checkLowStock(item) {
+            if (kitItems[item].quantity < kitItems[item].alertThreshold) {
+                alert(item.charAt(0).toUpperCase() + item.slice(1) + " are low! Please restock.");
+            }
+        }
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Mensural Kit Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <span class="menu-icon" onclick="toggleMenu()">☰</span>
+            <div class="menu-items" id="menuItems">
+                <a href="#">Help</a>
+                <a href="#">Feedback</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+        <h1>Smart Mensural Kit</h1>
+        <div class="profile">
+            <img src="profile.png" alt="Profile" class="profile-icon">
+        </div>
+    </header>
+    
+    <main>
+        <div class="dashboard">
+            <div class="box" onclick="openPage('period-tracker.html')">Period Tracker</div>
+            <div class="box" onclick="openPage('napkin-tracker.html')">Napkin Tracker</div>
+            <div class="box" onclick="openPage('stress-monitor.html')">Stress Monitor</div>
+            <div class="box" onclick="openPage('heat-patch.html')">Heat Patches</div>
+            <div class="box" onclick="openPage('charger.html')">Charger</div>
+            <div class="box" onclick="openPage('mensural-kit.html')">Mensural Kit</div>
+        </div>
+    </main>
+</body>
+</html>
+

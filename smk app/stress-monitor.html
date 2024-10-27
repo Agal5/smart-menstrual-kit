@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        header {
+            background-color: #d63384;
+            color: white;
+            padding: 1em;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stress-container {
+            margin-top: 70px;
+        }
+
+        .stress-level {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 0.7em 1.5em;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 1em 0;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #a8276a;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Stress Monitor</h1>
+    </header>
+    <main class="stress-container">
+        <div class="integration-status" id="integrationStatus">
+            <p>Click the button below to integrate with your smartwatch.</p>
+            <button id="integrateButton">Integrate Smartwatch</button>
+        </div>
+        <div class="stress-level hidden" id="stressLevelContainer">
+            Stress Level: <span id="level">0</span>
+        </div>
+    </main>
+
+    <script>
+        // Simulate fetching stress data from a smartwatch
+        function getStressLevel() {
+            // Simulate stress level (0-100)
+            return Math.floor(Math.random() * 101);
+        }
+
+        document.getElementById("integrateButton").addEventListener("click", function() {
+            // Simulate integration process
+            document.getElementById("integrationStatus").innerHTML = "<p>Integrating with smartwatch...</p>";
+
+            // Simulate a delay for the integration
+            setTimeout(() => {
+                const stressLevel = getStressLevel();
+                document.getElementById("level").textContent = stressLevel;
+                document.getElementById("stressLevelContainer").classList.remove("hidden");
+
+                // Alert user to drink water if stress level is above 70
+                if (stressLevel > 70) {
+                    alert("Your stress level is high! Please drink some water.");
+                }
+            }, 2000); // 2 seconds delay to simulate integration
+        });
+    </script>
+</body>
+</html>
+

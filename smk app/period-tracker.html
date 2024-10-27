@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Period Tracker</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e9;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Header styling */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #d63384;
+            color: white;
+            padding: 1em;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        /* Tracker Container */
+        .tracker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        /* Circle Style */
+        .circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #ff6f91;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 2em;
+        }
+
+        /* Calendar Styles */
+        .calendar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #periodStartDate {
+            margin-bottom: 1em;
+            padding: 0.5em;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 0.7em 1.5em;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 2em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #a8276a;
+        }
+
+        /* Calendar Dates Styling */
+        #calendarDates {
+            width: 100%;
+            max-width: 600px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1em;
+            margin-top: 1em;
+            text-align: center;
+        }
+
+        .calendar-date {
+            padding: 1em;
+            border-radius: 5px;
+            background-color: #ffd1dc;
+            cursor: pointer;
+        }
+
+        .calendar-date.period {
+            background-color: #ff6f91;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Period Tracker</h1>
+    </header>
+    <main>
+        <div class="tracker-container">
+            <div class="circle" id="nextPeriodCircle">
+                <p id="nextPeriodDate">Next Period: --/--/----</p>
+            </div>
+            <div class="calendar">
+                <input type="date" id="periodStartDate" placeholder="Select Start Date">
+                <button onclick="setPeriodDate()">Set Period Date</button>
+                <div id="calendarDates"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Function to set the period date
+        function setPeriodDate() {
+            const periodStartDate = document.getElementById("periodStartDate").value;
+            if (periodStartDate) {
+                const nextPeriodDate = calculateNextPeriodDate(new Date(periodStartDate));
+                document.getElementById("nextPeriodDate").textContent = `Next Period: ${nextPeriodDate.toDateString()}`;
+
+                // Save to localStorage
+                localStorage.setItem("periodStartDate", periodStartDate);
+                localStorage.setItem("nextPeriodDate", nextPeriodDate.toISOString());
+
+                // Update calendar
+                updateCalendarDates(periodStartDate);
+            } else {
+                alert("Please select a start date for your period.");
+            }
+        }
+
+        // Function to calculate the next period date (28-day cycle)
+        function calculateNextPeriodDate(startDate) {
+            const nextPeriod = new Date(startDate);
+            nextPeriod.setDate(nextPeriod.getDate() + 28);
+            return nextPeriod;
+        }
+
+        // Function to update the calendar display with the period dates
+        function updateCalendarDates(periodStartDate) {
+            const calendarDatesContainer = document.getElementById("calendarDates");
+            calendarDatesContainer.innerHTML = ""; // Clear existing dates
+
+            const startDate = new Date(periodStartDate);
+            const currentDate = new Date(startDate);
+
+            for (let i = 0; i < 35; i++) { // Show 5 weeks
+                const dateElement = document.createElement("div");
+                dateElement.classList.add("calendar-date");
+                dateElement.textContent = currentDate.getDate();
+
+                if (i < 7 && currentDate >= startDate && currentDate <= calculateNextPeriodDate(startDate)) {
+                    dateElement.classList.add("period");
+                }
+
+                calendarDatesContainer.appendChild(dateElement);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+        }
+
+        // Load stored period data on page load
+        window.onload = function () {
+            const storedStartDate = localStorage.getItem("periodStartDate");
+            const storedNextPeriodDate = localStorage.getItem("nextPeriodDate");
+
+            if (storedStartDate && storedNextPeriodDate) {
+                document.getElementById("nextPeriodDate").textContent = `Next Period: ${new Date(storedNextPeriodDate).toDateString()}`;
+                updateCalendarDates(storedStartDate);
+            }
+        };
+    </script>
+</body>
+</html>
+
+

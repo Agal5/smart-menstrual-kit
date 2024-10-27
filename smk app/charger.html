@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charger Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e9; /* Light pink background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Fill entire viewport height */
+            flex-direction: column; /* Stack elements vertically */
+        }
+
+        header {
+            background-color: #d63384;
+            color: white;
+            padding: 1em;
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            top: 0;
+        }
+
+        .charger-box {
+            border: 2px solid #d63384; /* Charger box border color */
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            border-radius: 10px;
+            background-color: #fff; /* White background for the charger box */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .charger-status {
+            font-size: 1.5em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .low-battery {
+            color: red; /* Red color for low battery warning */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Charger Status</h1>
+    </header>
+    <div class="charger-box">
+        <p>Charger Box</p>
+    </div>
+    <div class="charger-status" id="chargerStatus">Battery Level: <span id="batteryLevel">100</span>%</div>
+
+    <script>
+        // Charger Status
+        let batteryLevel = 100; // Starting battery level
+
+        function checkBattery() {
+            // Simulate battery drain
+            batteryLevel -= Math.random() * 10; // Random drain between 0-10
+            batteryLevel = Math.max(batteryLevel, 0); // Ensure battery doesn't go below 0
+            
+            document.getElementById("batteryLevel").textContent = batteryLevel.toFixed(0); // Update displayed battery level
+
+            // Check battery level for notification
+            if (batteryLevel < 20) {
+                notifyLowBattery();
+            }
+        }
+
+        function notifyLowBattery() {
+            document.getElementById("chargerStatus").innerHTML = "Battery Level: <span class='low-battery'>" + batteryLevel.toFixed(0) + "% - Please Charge!</span>";
+        }
+
+        // Check battery status every 5 seconds
+        setInterval(checkBattery, 5000);
+    </script>
+</body>
+</html>

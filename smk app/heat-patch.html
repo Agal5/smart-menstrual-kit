@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Patch Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #d63384;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        .heat-patch-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #toggleHeatPatch {
+            background-color: red; /* Default color */
+            color: white;
+            border: none;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%; /* Round button */
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #toggleHeatPatch.on {
+            background-color: green; /* On state color */
+        }
+
+        #temperatureDisplay {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Heat Patch Control</h1>
+    </header>
+    <div class="heat-patch-container">
+        <button id="toggleHeatPatch">Off</button>
+        <div id="temperatureDisplay">Temperature: <span id="temperature">0</span> °C</div>
+    </div>
+
+    <script>
+        // Heat Patch Control
+        let heatPatchOn = false;
+
+        document.getElementById("toggleHeatPatch").addEventListener("click", function() {
+            heatPatchOn = !heatPatchOn;
+            this.textContent = heatPatchOn ? "On" : "Off";
+            this.classList.toggle("on", heatPatchOn); // Add 'on' class to change color
+            updateTemperatureDisplay();
+        });
+
+        function updateTemperatureDisplay() {
+            const temperature = heatPatchOn ? (Math.random() * (40 - 30) + 30).toFixed(1) : 0; // Simulate temperature range
+            document.getElementById("temperature").textContent = temperature;
+        }
+    </script>
+</body>
+</html>
+
